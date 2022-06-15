@@ -1,0 +1,252 @@
+//the code that I was working on. 
+//////////////////
+
+
+/*
+public class LinkedFrontBackCappedList<T> implements FrontBackCappedListInterface<T> {
+
+	private Node head, tail;
+	int numberOfEntries, capacity;
+   
+   // YOUR CLASS CODE GOES HERE!
+    public LinkedFrontBackCappedList(int capacity) {
+	   head = null;
+	   tail = null;
+	   numberOfEntries = 0;
+	   this.capacity = capacity;
+	   
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder s = new StringBuilder();
+		Node current = head;
+		s.append("[");
+		while (current!=null) {
+		   //s.append(current.data  + " -> ");
+		   s.append(current.data + ", ");
+		   current = current.next;
+		}
+		//s.append(current.data + " ");
+		s.append("]");
+		//s.append("\n");
+		return s.toString();
+	 }
+
+
+	//"[5, 4, 3, 2, 3, 8, 9]\tsize=7\tcapacity=10\thead=5 tail=9"
+	/*
+	@Override
+	public String toString(){
+		  String returnString = "";
+		  Node currentNode = head;
+		  while(currentNode!=null){
+				returnString += currentNode.data;
+				if(currentNode.next!=null){
+					returnString += ", ";
+				}
+				currentNode = currentNode.next;
+			}
+			if(head!=null && tail!=null){
+				return "[" + returnString + "]     "+"size=" + numberOfEntries+ "  capacity=" + capacity + "    head="+head.data+ " tail="+tail.data;
+			} else {
+				return "[" + returnString + "]     "+"size=" + numberOfEntries+ "  capacity=" + capacity;// + "    head=null"+ " tail=null";
+			}
+	}
+
+	
+
+	public boolean isEmpty() {
+		return numberOfEntries == 0;
+	}
+
+	public boolean isFull() {
+		return numberOfEntries == capacity;
+	}
+
+	public int size() {
+		return numberOfEntries;//or numberOfEntries;
+	}
+
+
+	public T getEntry(int index){
+		T result = null;//should it be  for loop insetead?
+		if(head.next !=null && 0 <= index && index <= numberOfEntries){
+			Node currentNode = head;
+			for(int counter = 0; counter <= index; counter++){
+				currentNode = currentNode.next;
+			}
+			currentNode = currentNode.getNextNode();//because "currentNode" is null
+		}
+		return result;
+	}
+
+
+	public void clear() {
+		head = null;
+	}
+
+	//when there is a room to add, they current elemtnds in the lsit are shifted to make room and the 
+	//new entry is added to the fron of the list
+	public boolean addFront(T anEntry) {
+		boolean added = false;
+		if(!isFull()){
+			Node newNode = new Node(anEntry);
+		    newNode.next = head; 
+		    head = newNode; 
+		    numberOfEntries++;
+			added = true;
+		}
+		return added;
+	}
+
+	//it was working then it doesnt anymore (start by referring to the website I was looking at )
+	/*
+	public boolean addBack(T anEntry){
+		boolean added = false;
+		Node currentLast = tail;
+		if(!isEmpty() && !isFull() && currentLast!=null){
+			currentLast = currentLast.next = new Node(anEntry);
+			added = true;
+			numberOfEntries++;
+			//currentLast.data = anEntry;
+		} else if(isEmpty() && currentLast!=null){
+			//head = tail = new Node(anEntry);
+			currentLast = new Node(anEntry);
+			added = true;
+			numberOfEntries++;
+			//head.data = tail.data =anEntry;
+		}
+		//if(added){
+			//numberOfEntries++;
+		//}
+		return added;
+	}
+	
+
+	public boolean addBack(T anEntry){
+		boolean added  = false;
+		if(isEmpty() || !isFull()){
+			head = tail = new Node(anEntry);
+			added = true;
+		} else {
+			tail = tail.next = new Node(anEntry);
+			added = true;
+		}
+		if(added){
+			numberOfEntries++;
+		}
+		return added;
+	}
+
+Node newNode = new Node(anEntry);
+		    newNode.next = head; 
+		    head = newNode; 
+		    numberOfEntries++;
+			added = true;
+
+
+
+	//wlwmtnd shifted down after reamoing from the front 
+	public T removeFront() {
+		T result = null;
+		if(head!=null){
+		    result = head.data; //shouldit be head.getData()
+			head = head.next;
+			numberOfEntries--;
+		}
+		return result;
+	}
+//return null when the list is empty which it does already 
+	public T removeBack() {
+		T result = null;
+		if(!isEmpty()){
+			
+			result = tail.data; //shouldit be tail.getData()
+			//how do you get the previous node to connect it to the tail.
+			//would I use getEntry(index) or indexOf??
+		} 
+		return result;
+	}
+
+	public boolean contains(T anEntry) {
+		boolean contains = false;
+		Node currentNode = head;
+		while(!head.data.equals(anEntry)){
+			currentNode = currentNode.next;
+			if(head.data.equals(anEntry)){// the loop stops when it finds the entry 
+				contains = true; 
+			}
+		}
+		return contains;
+	}
+
+	public int indexOf(T anEntry) {
+		int index = 0, result = -1;
+		Node currentNode = head;
+		if(contains(anEntry)){
+			while(currentNode!=null){
+				if(currentNode.data.equals(anEntry)){
+					result = index;
+				}
+				currentNode = currentNode.next;
+			}
+		}
+		return result;//this loops until the end of the list so how do i make it stop when it finds an index to return 
+	}
+
+	public int lastIndexOf(T anEntry) {
+		int lastIndex = -1, index = 0;
+		Node currentNode = head;
+		if(contains(anEntry)){
+			while(currentNode!=null){
+				if(currentNode.data.equals(anEntry)){
+					lastIndex = index;
+				}
+				currentNode = currentNode.next;
+				//currentNode.setNextNode(currentNode.next); woudl this work too
+			}
+		}
+		return lastIndex;
+	}
+
+	
+
+	
+
+
+	public class Node {
+		public T data; 
+		public Node next; 
+
+		private Node(T dataValue) {
+			data = dataValue;
+			next = null;
+		}
+
+		private Node(T dataValue, Node nextNode) {
+			data = dataValue;
+			next = nextNode;
+		}
+
+		private T getData() {
+			return data;
+		}
+
+		private void setData(T newData) {
+			data = newData;
+		}
+
+		private Node getNextNode() {
+			return next;
+		}
+
+		private void setNextNode(Node nextNode) {
+			next = nextNode;
+		} 
+	} 
+}
+
+
+
+*/
